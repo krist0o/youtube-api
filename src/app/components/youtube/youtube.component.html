@@ -1,5 +1,14 @@
 <div>
   <button (click)="getResults()">click</button>
-  <div *ngFor="let result of stringRes">result</div>
-</div>
 
+    <div *ngFor = "let item of itemRes; let i=index;">
+      <p>Title: {{item.snippet.title}}</p>
+      <p>Channel title: {{item.snippet.channelTitle}}</p>
+      <p>Video description: {{item.snippet.description}}</p>
+      <p>Published at: {{item.snippet.publishedAt}}</p>
+      <p>Video id: {{videoIds[i]}}</p>
+      <img src={{item.snippet.thumbnails.medium.url}}>
+      <br>
+    </div>
+
+</div>

@@ -1,5 +1,5 @@
 import {PageInfo} from "./page-info";
-import {Search} from "./search";
+import {Item} from "./item";
 
 export class YoutubeResponse {
   kind: string;
@@ -8,10 +8,10 @@ export class YoutubeResponse {
   prevPageToken: string;
   regionCode: string;
   pageInfo: PageInfo;
-  items: Search[];
+  items: Item[];
 
 
-  constructor(kind: string, etag: string, nextPageToken: string, prevPageToken: string, regionCode: string, pageInfo: PageInfo, items: Search[]) {
+  constructor(kind: string, etag: string, nextPageToken: string, prevPageToken: string, regionCode: string, pageInfo: PageInfo, items: Item[]) {
     this.kind = kind;
     this.etag = etag;
     this.nextPageToken = nextPageToken;
