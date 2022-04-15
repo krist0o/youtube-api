@@ -27,14 +27,14 @@ export class YoutubeApiServiceService {
     return this.http.get<YoutubeResponse>(this.url + '/search', httpOptions);
   }
 
-  getStatistics(videoId: string): Observable<StatisticsResponse>{
+  getStatistics(videoIds: string[]): Observable<YoutubeResponse>{
     const httpOptions = {
       headers: new HttpHeaders({
         Accept: 'application/json'}),
       params: new HttpParams().set('part', 'statistics')
     }
     httpOptions.params = httpOptions.params.set('key','AIzaSyDyMgh39gRp3qbOzmExsZLF3OBsPKu0igw');
-    httpOptions.params = httpOptions.params.set('id', videoId);
-    return this.http.get<StatisticsResponse>(this.url + '/videos', httpOptions);
+    httpOptions.params = httpOptions.params.set('id', videoIds.join(','));
+    return this.http.get<YoutubeResponse>(this.url + '/videos', httpOptions);
   }
 }

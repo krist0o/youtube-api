@@ -6,7 +6,10 @@
       <p>Channel title: {{item.snippet.channelTitle}}</p>
       <p>Video description: {{item.snippet.description}}</p>
       <p>Published at: {{item.snippet.publishedAt}}</p>
-      <p>Video id: {{videoIds[i]}}</p>
+<!--      <p>{{getCountById(item.id.videoId)}}</p>-->
+      <p>Like count: {{statistics[i]?.likeCount}}</p>
+      <p>Comment count: {{statistics[i]?.commentCount}}</p>
+      <p>View count: {{statistics[i]?.viewCount}}</p>
       <img src={{item.snippet.thumbnails.medium.url}}>
       <br>
     </div>
