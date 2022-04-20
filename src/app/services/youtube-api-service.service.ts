@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {YoutubeResponse} from "../models/youtube-response";
 import {Observable} from "rxjs";
-import {StatisticsResponse} from "../models/statistics-response";
+import {InputParams} from "../models/input-params";
 
 
 @Injectable({
@@ -10,31 +10,33 @@ import {StatisticsResponse} from "../models/statistics-response";
 })
 export class YoutubeApiServiceService {
 
-  url = 'https://www.googleapis.com/youtube/v3';
+  private url = 'https://www.googleapis.com/youtube/v3';
+  private key = 'AIzaSyDyMgh39gRp3qbOzmExsZLF3OBsPKu0igw';
+  private maxResults = '15';
 
   constructor(private http: HttpClient) {
   }
 
-  getList(input: string, maxResults: number): Observable<YoutubeResponse> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        Accept: 'application/json'}),
-      params: new HttpParams().set('part', 'snippet')
-    }
-    httpOptions.params = httpOptions.params.set('key','AIzaSyDyMgh39gRp3qbOzmExsZLF3OBsPKu0igw');
-    httpOptions.params = httpOptions.params.set('q', input);
-    httpOptions.params = httpOptions.params.set('maxResults', maxResults);
+  getIdList(input: string): Observable<YoutubeResponse> {
+    let inputParams: InputParams[] = [new InputParams('q',input),new InputParams('maxResults',this.maxResults)];
+    let httpOptions = this.createHttpOptionsWithParams(inputParams);
     return this.http.get<YoutubeResponse>(this.url + '/search', httpOptions);
   }
 
-  getStatistics(videoIds: string[]): Observable<YoutubeResponse>{
+  getVideoInfo(videoIds: string[]): Observable<YoutubeResponse>{
+    let inputParams: InputParams[] = [new InputParams('part', 'statistics,snippet'),
+      new InputParams('id', videoIds.join(','))];
+    let httpOptions = this.createHttpOptionsWithParams(inputParams);
+    return this.http.get<YoutubeResponse>(this.url + '/videos', httpOptions);
+  }
+
+  createHttpOptionsWithParams(inputParams: InputParams[]) : typeof httpOptions{
     const httpOptions = {
       headers: new HttpHeaders({
         Accept: 'application/json'}),
-      params: new HttpParams().set('part', 'statistics')
+      params: new HttpParams().set('key',this.key)
     }
-    httpOptions.params = httpOptions.params.set('key','AIzaSyDyMgh39gRp3qbOzmExsZLF3OBsPKu0igw');
-    httpOptions.params = httpOptions.params.set('id', videoIds.join(','));
-    return this.http.get<YoutubeResponse>(this.url + '/videos', httpOptions);
+    inputParams.forEach(value => httpOptions.params = httpOptions.params.set(value.key,value.value));
+    return httpOptions;
   }
 }

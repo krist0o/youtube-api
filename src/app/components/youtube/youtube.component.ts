@@ -1,55 +1,66 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {YoutubeApiServiceService} from "../../services/youtube-api-service.service";
 import {Subscription} from "rxjs";
 import {YoutubeResponse} from "../../models/youtube-response";
 import {Item} from "../../models/item";
-import {StatisticsResponse} from "../../models/statistics-response";
+import {debounceTime, distinctUntilChanged, filter, fromEvent, map} from "rxjs";
 
 @Component({
   selector: 'app-youtube',
   templateUrl: './youtube.component.html',
   styleUrls: ['./youtube.component.css']
 })
-export class YoutubeComponent implements OnInit, OnDestroy {
+export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  itemRes: Item[] = [];
-  input = "соба";
-  maxResults = 3;
-  statistics: StatisticsResponse[] = [];
+  @ViewChild('input')
+  input!: ElementRef;
+
+  items: Item[] = [];
 
   getResultsSubscription = new Subscription;
-  getStatisticsSubscription = new Subscription;
+  getVideoInfoSubscription = new Subscription;
+  getAutoCompleteSubscription = new Subscription;
 
   constructor(private youtubeApiService: YoutubeApiServiceService) {
+
   }
+
+  ngAfterViewInit(): void {
+    const input: HTMLInputElement = this.input.nativeElement as HTMLInputElement;
+
+    this.getAutoCompleteSubscription = fromEvent(input, 'input')
+      .pipe(map((event: Event) => (event.target as HTMLInputElement).value),
+        debounceTime(400),
+        distinctUntilChanged())
+      .subscribe((value:string) => {
+        this.getResults(value)
+      });
+    }
 
   ngOnDestroy(): void {
     this.getResultsSubscription.unsubscribe();
-    this.getStatisticsSubscription.unsubscribe();
+    this.getVideoInfoSubscription.unsubscribe();
+    this.getAutoCompleteSubscription.unsubscribe();
   }
+
 
   ngOnInit(): void {
   }
 
-  getResults() {
+  getResults(input:string) {
     this.getResultsSubscription = this.youtubeApiService
-      .getList(this.input, this.maxResults)
-      .subscribe((res: YoutubeResponse) => {
-        this.itemRes = res.items;
-        const videoIds = this.itemRes.map((item: Item) => item.id.videoId);
-        this.getStatistics(videoIds)
+      .getIdList(input)
+      .subscribe((response: YoutubeResponse) => {
+        const videoIds = response.items.map((item: Item) => item.id.videoId);
+        this.getVideoInfo(videoIds)
       });
   }
 
-  getStatistics(videoIds:string[]){
-    this.getStatisticsSubscription = this.youtubeApiService
-      .getStatistics(videoIds)
-      .subscribe((res: YoutubeResponse) => {
-        this.statistics = res.items.map((item:Item)=> item.statistics);
+  getVideoInfo(videoIds:string[]){
+    this.getVideoInfoSubscription = this.youtubeApiService
+      .getVideoInfo(videoIds)
+      .subscribe((response: YoutubeResponse) => {
+        this.items = response.items.map((item:Item)=> item);
       })
   }
-
-  // getCountById(videoId: string) {
-  //   this.statistics.forEach(value => value.)
-  // }
 }

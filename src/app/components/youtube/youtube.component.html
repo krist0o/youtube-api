@@ -1,15 +1,15 @@
-<div>
-  <button (click)="getResults()">click</button>
 
-    <div *ngFor = "let item of itemRes; let i=index;">
+<div>
+  <input #input>
+
+    <div *ngFor = "let item of items; let i=index;">
       <p>Title: {{item.snippet.title}}</p>
       <p>Channel title: {{item.snippet.channelTitle}}</p>
-      <p>Video description: {{item.snippet.description}}</p>
-      <p>Published at: {{item.snippet.publishedAt}}</p>
-<!--      <p>{{getCountById(item.id.videoId)}}</p>-->
-      <p>Like count: {{statistics[i]?.likeCount}}</p>
-      <p>Comment count: {{statistics[i]?.commentCount}}</p>
-      <p>View count: {{statistics[i]?.viewCount}}</p>
+      <p>Video description: {{item.snippet.description | cutText}}</p>
+      <p>Published at: {{item.snippet.publishedAt | date:'dd.MM.yyyy'}}</p>
+      <p>Like count: {{item.statistics.likeCount | formatNumber}}</p>
+      <p>Comment count: {{item.statistics.commentCount | formatNumber}}</p>
+      <p>View count: {{item.statistics.viewCount | formatNumber}}</p>
       <img src={{item.snippet.thumbnails.medium.url}}>
       <br>
     </div>
