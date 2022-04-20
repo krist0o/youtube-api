@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {YoutubeResponse} from "../models/youtube-response";
 import {Observable} from "rxjs";
-import {InputParams} from "../models/input-params";
 
 
 @Injectable({
@@ -18,25 +17,30 @@ export class YoutubeApiServiceService {
   }
 
   getIdList(input: string): Observable<YoutubeResponse> {
-    let inputParams: InputParams[] = [new InputParams('q',input),new InputParams('maxResults',this.maxResults)];
+    let inputParams = new Map<string, string>();
+    inputParams.set('q', input);
+    inputParams.set('maxResults', this.maxResults);
     let httpOptions = this.createHttpOptionsWithParams(inputParams);
     return this.http.get<YoutubeResponse>(this.url + '/search', httpOptions);
   }
 
-  getVideoInfo(videoIds: string[]): Observable<YoutubeResponse>{
-    let inputParams: InputParams[] = [new InputParams('part', 'statistics,snippet'),
-      new InputParams('id', videoIds.join(','))];
+  getVideoInfo(videoIds: string[]): Observable<YoutubeResponse> {
+    let inputParams = new Map<string, string>();
+    inputParams.set('part', 'statistics,snippet');
+    inputParams.set('id', videoIds.join(','));
     let httpOptions = this.createHttpOptionsWithParams(inputParams);
     return this.http.get<YoutubeResponse>(this.url + '/videos', httpOptions);
   }
 
-  createHttpOptionsWithParams(inputParams: InputParams[]) : typeof httpOptions{
+  createHttpOptionsWithParams(inputParams: Map<string, string>): typeof httpOptions {
     const httpOptions = {
       headers: new HttpHeaders({
-        Accept: 'application/json'}),
-      params: new HttpParams().set('key',this.key)
+        Accept: 'application/json'
+      }),
+      params: new HttpParams().set('key', this.key)
     }
-    inputParams.forEach(value => httpOptions.params = httpOptions.params.set(value.key,value.value));
+    for (let entry of inputParams)
+      httpOptions.params = httpOptions.params.set(entry[0], entry[1]);
     return httpOptions;
   }
 }
