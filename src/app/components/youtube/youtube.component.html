@@ -2,6 +2,8 @@
 <div>
   <input #input>
 
+    <h1>{{listSize.toString()}}</h1>
+
     <div *ngFor = "let item of items; let i=index;">
       <p>Title: {{item.snippet.title}}</p>
       <p>Channel title: {{item.snippet.channelTitle}}</p>
