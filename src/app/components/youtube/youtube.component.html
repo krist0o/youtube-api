@@ -1,19 +1,43 @@
-
-<div>
-  <input #input>
-
-    <h1>{{listSize.toString()}}</h1>
-
-    <div *ngFor = "let item of items; let i=index;">
-      <p>Title: {{item.snippet.title}}</p>
-      <p>Channel title: {{item.snippet.channelTitle}}</p>
-      <p>Video description: {{item.snippet.description | cutText}}</p>
-      <p>Published at: {{item.snippet.publishedAt | date:'dd.MM.yyyy'}}</p>
-      <p>Like count: {{item.statistics.likeCount | formatNumber}}</p>
-      <p>Comment count: {{item.statistics.commentCount | formatNumber}}</p>
-      <p>View count: {{item.statistics.viewCount | formatNumber}}</p>
-      <img src={{item.snippet.thumbnails.medium.url}}>
-      <br>
+<div class = "wrapper">
+  <header>
+    <div class="search_icon">
+      <img src=' ' alt="search">
     </div>
+    <label>
+      <input #input>
+    </label>
+  </header>
+  <body>
+    <div class="page">
+      <div class="clip" *ngFor="let item of items.slice(0,listSize); let i=index;">
+        <div class="clip_header">
+          <div class="clip_image">
+            <img src={{item.snippet.thumbnails.medium.url}}>
+          </div>
+          <div class="clip_title">
+            <h1>{{item.snippet.title}}</h1>
+          </div>
+        </div>
+        <div class="clip_info">
+          <p>Channel: {{item.snippet.channelTitle}}</p>
+          <p>Video description: {{item.snippet.description | cutText}}</p>
+          <p>Published at: {{item.snippet.publishedAt | date:'dd.MM.yyyy'}}</p>
+          <p>Like count: {{item.statistics.likeCount | formatNumber}}</p>
+          <p>Comment count: {{item.statistics.commentCount | formatNumber}}</p>
+          <p>View count: {{item.statistics.viewCount | formatNumber}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="pagination_panel">
+      <button class="move_back"></button>
+      <button class="page_button"></button>
+      <button class="page_button"></button>
+      <button class="page_button"></button>
+      <button class="page_button"></button>
+      <button class="move_forward"></button>
+    </div>
+  </body>
+  <footer>
 
+  </footer>
 </div>
