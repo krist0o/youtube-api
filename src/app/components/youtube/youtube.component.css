@@ -1,63 +1,128 @@
 .wrapper {
+  min-height: 100%;
+  overflow: hidden;
+  background-color: #2e2e2e;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  margin: 0 0 auto;
-  background-color: #696969;
+  align-items: center;
 }
 
-header {
-  flex: 1 1 auto;
+.content{
+  min-height: 1080px;
+  max-width: 1280px;
+  margin-top: 5px;
+}
+.search_container{
   display: flex;
-  flex-direction: row;
   justify-content: center;
-
-  height: 40px;
-  width: 100%;
-  background-color: bisque;
 }
 
-body {
-  flex: 0 0 auto;
-  height: 600px;
-  width: 100%;
-  background-color: aquamarine;
+.search {
+  display: inline-flex;
+  height: 20px;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #ffffff;
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  order: -1;
+}
+
+.search-field {
+  width: 250px;
+  border: 0;
+  font-size: 18px;
+}
+
+.search-field:focus {
+  outline: none;
+}
+
+.search-field:focus + .search-icon {
+  /* стили для иконки при фокусе поля */
+}
+
+.results{
+  padding: 5px;
 }
 
 .page {
-  flex: 0 0 auto;
+  height: 440px;
   display: flex;
-  width: 100%;
-  height: 550px;
-  flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .clip {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  flex: 0 0 auto;
-  height: 540px;
-  width: 320px;
+  height: 400px;
+  width: 280px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 8px 0;
+  margin: 0 20px;
 }
 
+.clip_header{
+  display: flex;
+  align-items: center;
+  height: 150px;
+
+}
+
+.clip_header img{
+  width: 100%;
+}
+
+.clip_header_title{
+  width: 277px;
+  position: absolute;
+  word-wrap: break-word;
+  background: #0d7110;
+  opacity: 90%;
+  font-size: 18px;
+  text-align: center;
+  color: white;
+}
+
+.clip_info{
+
+}
 
 .pagination_panel {
-  display: flex;
-  flex: 0 0 auto;
   height: 40px;
-  flex-direction: row;
+  display: flex;
   justify-content: center;
-  background-color: aliceblue;
+  align-items: center;
+}
+
+.pagination_container{
+  display: flex;
+  justify-content: center;
 }
 
 .page_button{
-  padding: 10px 10px;
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+  border-color: #ffffff;
+  margin: 0 5px;
+  font-size: 15px;
 }
 
-footer {
-  flex: 0 1 auto;
-  background-color: brown;
-  height: 10px;
+.move_back{
+  height: 30px;
+  width: 30px;
+  margin-right: 30px;
+  font-size: 15px;
+}
+
+.move_forward{
+  height: 30px;
+  width: 30px;
+  margin-left: 30px;
+  font-size: 15px;
 }

@@ -11,7 +11,7 @@ export class YoutubeApiServiceService {
 
   private url = 'https://www.googleapis.com/youtube/v3';
   private key = 'AIzaSyDyMgh39gRp3qbOzmExsZLF3OBsPKu0igw';
-  private maxResults = '15';
+  private maxResults = '5';
 
   constructor(private http: HttpClient) {
   }
