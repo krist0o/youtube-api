@@ -5,6 +5,7 @@ import {YoutubeResponse} from "../../models/youtube-response";
 import {Item} from "../../models/item";
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 import {ListSize} from "../../models/list-size";
+import {HttpErrorResponse} from "@angular/common/http";
 
 
 @Component({
@@ -78,7 +79,11 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
         const videoIds = response.items.map((item: Item) => item.id.videoId);
         this.nextPageToken = response.nextPageToken;
         this.getVideoInfo(videoIds)
-      });
+      }, (error: HttpErrorResponse) => {
+          if (error.status === 403)
+            alert('Exception 403. Reason: quotaExceeded. \nПревышена квота на запросы с данного ключа, можно сменить ключ или подождать до завтра =)')
+        }
+      );
   }
 
   getVideoInfo(videoIds: string[]) {
