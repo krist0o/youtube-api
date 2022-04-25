@@ -9,7 +9,7 @@
       </div>
       <div class="results">
         <div class="page">
-          <div class="clip" *ngFor="let item of items.slice(0,listSize); let i=index;">
+          <div class="clip" *ngFor="let item of items.slice(currentPage*listSize,(currentPage+1)*listSize);">
             <div class="clip_header">
               <img src={{item.snippet.thumbnails.medium.url}}>
               <div class="clip_header_title"> {{item.snippet.title}}</div>
@@ -25,13 +25,16 @@
         </div>
       </div>
       <div class="pagination_panel">
-        <div class="pagination_container">
-          <button class="move_back"><</button>
-          <button class="page_button">1</button>
-          <button class="page_button">2</button>
-          <button class="page_button">3</button>
-          <button class="page_button">4</button>
-          <button class="move_forward">></button>
+        <div *ngIf="paginationPanelEnabled" class="pagination_container">
+          <button *ngIf="moveBackEnabled" class="move_back" (click)="changeCurrentPage(-1)"><</button>
+          <div *ngFor="let i of [0,1,2,3];">
+            <button class="page_button"
+                    style="{{currentPage+1==pageButtons[i]?'background-color:red; color:white':''}}"
+                    (click)="setCurrentPage(pageButtons[i])">
+              {{pageButtons[i]}}
+            </button>
+          </div>
+          <button *ngIf="moveForwardEnabled" class="move_forward" (click)="changeCurrentPage(1)">></button>
         </div>
       </div>
     </div>

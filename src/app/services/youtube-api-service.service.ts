@@ -12,7 +12,7 @@ export class YoutubeApiServiceService {
   private url = 'https://www.googleapis.com/youtube/v3';
   private key = 'AIzaSyDXOF2JLAK4HUKaki3PqLWlHlDBxPjayts';
   // private key = 'AIzaSyDyMgh39gRp3qbOzmExsZLF3OBsPKu0igw';
-  private maxResults = '5';
+  private maxResults = '15';
 
   constructor(private http: HttpClient) {
   }
@@ -43,5 +43,12 @@ export class YoutubeApiServiceService {
     for (let entry of inputParams)
       httpOptions.params = httpOptions.params.set(entry[0], entry[1]);
     return httpOptions;
+  }
+
+  getIdListByToken(nextPageToken: string) {
+    let inputParams = new Map<string, string>();
+    inputParams.set('pageToken', nextPageToken);
+    let httpOptions = this.createHttpOptionsWithParams(inputParams);
+    return this.http.get<YoutubeResponse>(this.url + '/search', httpOptions);
   }
 }
