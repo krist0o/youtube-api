@@ -95,21 +95,20 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((response: YoutubeResponse) => {
         const videoIds = response.items.map((item: Item) => item.id.videoId);
         this.nextPageToken = response.nextPageToken;
-        this.getVideoInfo(videoIds)
+        this.getVideoInfo(videoIds);
+        this.addResultsIfNecessary();
       });
   }
 
-  changeCurrentPage(pageNumber: number) {
+  moveCurrentPage(pageNumber: number) {
     this.currentPage = this.currentPage + pageNumber;
-    if ((this.currentPage+1)*this.listSize>this.items.length)
-      this.addResults(this.nextPageToken);
+    this.addResultsIfNecessary();
     this.moveButtonsNumbers();
   }
 
   setCurrentPage(buttonValue: number) {
     this.currentPage = buttonValue - 1;
-    if ((this.currentPage+1)*this.listSize>this.items.length)
-      this.addResults(this.nextPageToken);
+    this.addResultsIfNecessary();
     this.moveButtonsNumbers();
   }
 
@@ -126,6 +125,11 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.moveForwardEnabled = false;
       this.pageButtons = this.pageButtons.map(value => value - 1);
     }
+  }
+
+  addResultsIfNecessary(){
+    if ((this.currentPage+1)*this.listSize>this.items.length)
+      this.addResults(this.nextPageToken);
   }
 }
 
