@@ -1,24 +1,26 @@
 <div class="wrapper">
-  <div class="content">
-    <div class="search_container">
-      <div class="search">
-        <input #input type="text" class="search-field" placeholder="Найди своё видео">
-        <img src="/assets/search-icon.svg" alt="" class="search-icon">
+  <div class="container">
+    <div class="content">
+      <div class="search_container">
+        <div class="search">
+          <input #input type="text" class="search-field" placeholder="Найди своё видео">
+          <img src="/assets/search-icon.svg" alt="" class="search-icon">
+        </div>
       </div>
-    </div>
-    <div class="results">
-      <div class="page">
-        <div class="clip" *ngFor="let item of items.slice(0,listSize); let i=index;">
-          <div class="clip_header">
-            <img src={{item.snippet.thumbnails.medium.url}}>
-            <div class="clip_header_title"> {{item.snippet.title}}</div>
-          </div>
-          <div class="clip_info">
-            <p>Channel: {{item.snippet.channelTitle}}</p>
-            <p>Published at: {{item.snippet.publishedAt | date:'dd.MM.yyyy'}}</p>
-            <p>Like count: {{item.statistics.likeCount | formatNumber}}</p>
-            <p>View count: {{item.statistics.viewCount | formatNumber}}</p>
-            <p>Video description: {{item.snippet.description | cutText}}</p>
+      <div class="results">
+        <div class="page">
+          <div class="clip" *ngFor="let item of items.slice(0,listSize); let i=index;">
+            <div class="clip_header">
+              <img src={{item.snippet.thumbnails.medium.url}}>
+              <div class="clip_header_title"> {{item.snippet.title}}</div>
+            </div>
+            <div class="clip_info">
+              <p>Channel: {{item.snippet.channelTitle}}</p>
+              <p>Published at: {{item.snippet.publishedAt | date:'dd.MM.yyyy'}}</p>
+              <p>Like count: {{item.statistics.likeCount | formatNumber}}</p>
+              <p>View count: {{item.statistics.viewCount | formatNumber}}</p>
+              <p>Video description: {{item.snippet.description | cutText}}</p>
+            </div>
           </div>
         </div>
       </div>

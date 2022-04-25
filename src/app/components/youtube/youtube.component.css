@@ -1,17 +1,21 @@
 .wrapper {
-  min-height: 100%;
   overflow: hidden;
   background-color: #2e2e2e;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
 .content{
-  min-height: 1080px;
+  min-height: 98vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   max-width: 1280px;
   margin-top: 5px;
 }
+
 .search_container{
   display: flex;
   justify-content: center;
@@ -48,12 +52,15 @@
 
 .results{
   padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .page {
   height: 440px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -62,15 +69,16 @@
   width: 280px;
   background-color: #ffffff;
   border-radius: 6px;
-  padding: 8px 0;
-  margin: 0 20px;
+  border: 0;
+  padding: 10px 0;
+  margin: 0 15px;
 }
 
 .clip_header{
   display: flex;
   align-items: center;
   height: 150px;
-
+  width: 100%
 }
 
 .clip_header img{
@@ -78,7 +86,7 @@
 }
 
 .clip_header_title{
-  width: 277px;
+  width: 280px;
   position: absolute;
   word-wrap: break-word;
   background: #0d7110;
@@ -89,7 +97,8 @@
 }
 
 .clip_info{
-
+  word-wrap: break-word;
+  padding: 0 5px;
 }
 
 .pagination_panel {
@@ -107,8 +116,8 @@
 .page_button{
   height: 30px;
   width: 30px;
+  border: 0;
   border-radius: 15px;
-  border-color: #ffffff;
   margin: 0 5px;
   font-size: 15px;
 }

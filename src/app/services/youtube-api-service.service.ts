@@ -10,7 +10,8 @@ import {Observable} from "rxjs";
 export class YoutubeApiServiceService {
 
   private url = 'https://www.googleapis.com/youtube/v3';
-  private key = 'AIzaSyDyMgh39gRp3qbOzmExsZLF3OBsPKu0igw';
+  private key = 'AIzaSyDXOF2JLAK4HUKaki3PqLWlHlDBxPjayts';
+  // private key = 'AIzaSyDyMgh39gRp3qbOzmExsZLF3OBsPKu0igw';
   private maxResults = '5';
 
   constructor(private http: HttpClient) {
