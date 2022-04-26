@@ -17,11 +17,21 @@
               </div>
             </a>
             <div class="clip_info">
-              <p>Channel: {{item.snippet.channelTitle}}</p>
-              <p>Published at: {{item.snippet.publishedAt | date:'dd.MM.yyyy'}}</p>
-              <p>Like count: {{item.statistics.likeCount | formatNumber}}</p>
-              <p>View count: {{item.statistics.viewCount | formatNumber}}</p>
-              <p>Video description: {{item.snippet.description | cutText}}</p>
+              <div class = "clip_info_container">
+                <div class="clip_info_row">
+                  <img src="/assets/person-icon.svg" alt="" class="person-icon">
+                  <div class="info_text">{{item.snippet.channelTitle}}</div>
+                </div>
+                <div class="clip_info_row">
+                  <img src="/assets/calendar-icon.svg" alt="" class="calendar-icon">
+                  <div class="info_text">{{item.snippet.publishedAt | date:'dd.MM.yyyy'}}</div>
+                </div>
+                <div class="clip_info_row">
+                  <img src="/assets/eye-icon.svg" alt="" class="eye-icon">
+                  <div class="info_text">{{item.statistics.viewCount | formatNumber}}</div>
+                </div>
+              </div>
+              <p>{{item.snippet.description | cutText}}</p>
             </div>
           </div>
         </div>
@@ -29,8 +39,7 @@
       <div class="pagination_panel">
         <div *ngIf="paginationPanelEnabled" class="pagination_container">
           <button *ngIf="moveBackEnabled" class="move_back"
-                  (click)="moveCurrentPage(-1)"
-                  [disabled]="buttonDisabled">
+                  (click)="moveCurrentPage(-1)">
             <
           </button>
           <div *ngFor="let i of [0,1,2,3];">
