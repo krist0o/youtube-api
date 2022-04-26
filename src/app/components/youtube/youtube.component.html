@@ -10,10 +10,12 @@
       <div class="results">
         <div class="page">
           <div class="clip" *ngFor="let item of items.slice(currentPage*listSize,(currentPage+1)*listSize);">
-            <div class="clip_header">
-              <img src={{item.snippet.thumbnails.medium.url}}>
-              <div class="clip_header_title"> {{item.snippet.title}}</div>
-            </div>
+            <a href="https://www.youtube.com/watch?v={{item.id}}" target="_blank">
+              <div class="clip_header">
+                <img src={{item.snippet.thumbnails.medium.url}}>
+                <div class="clip_header_title"> {{item.snippet.title}}</div>
+              </div>
+            </a>
             <div class="clip_info">
               <p>Channel: {{item.snippet.channelTitle}}</p>
               <p>Published at: {{item.snippet.publishedAt | date:'dd.MM.yyyy'}}</p>

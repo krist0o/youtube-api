@@ -19,6 +19,7 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
   input!: ElementRef;
 
   items: Item[] = [];
+  previousPageSize: ListSize = ListSize.ONE_ITEM_SIZE;
   listSize!: ListSize;
   currentPage: number = 0;
   moveBackEnabled = false;
@@ -43,11 +44,12 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.getAutoCompleteSubscription = fromEvent(input, 'input')
       .pipe(map((event: Event) => (event.target as HTMLInputElement).value),
-        debounceTime(400),
-        distinctUntilChanged())
+        debounceTime(400))
       .subscribe((value: string) => {
-        this.getResults(value)
-        this.paginationPanelEnabled = true;
+        if (value.trim() != "") {
+          this.getResults(value)
+          this.paginationPanelEnabled = true;
+        }
       });
   }
 
@@ -70,6 +72,13 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
           this.listSize = ListSize.TWO_ITEMS_SIZE;
         else
           this.listSize = ListSize.ONE_ITEM_SIZE;
+
+        //корректировка номера страницы и кнопок пагинации при изменении масштаба
+        if (this.currentPage != 0) {
+          this.currentPage = Math.floor((this.currentPage * this.previousPageSize + 0.9) / this.listSize);
+          this.refreshPageButtonPanel();
+        }
+        this.previousPageSize = this.listSize;
       });
   }
 
@@ -80,10 +89,13 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((response: YoutubeResponse) => {
           const videoIds = response.items.map((item: Item) => item.id.videoId);
           this.nextPageToken = response.nextPageToken;
-          this.getVideoInfo(videoIds)
+          this.getVideoInfo(videoIds);
+          this.currentPage = 0;
+          this.refreshPageButtonPanel()
         }, (error: HttpErrorResponse) => {
           if (error.status === 403)
-            alert('Exception 403. Reason: quotaExceeded. \nПревышена квота запросов с данного ключа, можно сменить ключ или подождать до завтра =)');
+            alert('Exception 403. Reason: quotaExceeded. ' +
+              '\nПревышена квота запросов с данного ключа, можно сменить ключ или подождать до завтра =)');
           else
             alert('Status: ' + error.status + '. Message: ' + error.message);
         }
@@ -91,6 +103,15 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getVideoInfo(videoIds: string[]) {
+    this.getVideoInfoSubscription = this.youtubeApiService
+      .getVideoInfo(videoIds)
+      .subscribe((response: YoutubeResponse) => {
+        this.items = response.items.map((item: Item) => item);
+        this.buttonDisabled = false;
+      })
+  }
+
+  addVideoInfo(videoIds: string[]) {
     this.getVideoInfoSubscription = this.youtubeApiService
       .getVideoInfo(videoIds)
       .subscribe((response: YoutubeResponse) => {
@@ -104,10 +125,9 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getVideoInfoSubscription = this.youtubeApiService
       .getIdListByToken(nextPageToken)
       .subscribe((response: YoutubeResponse) => {
-
           const videoIds = response.items.map((item: Item) => item.id.videoId);
           this.nextPageToken = response.nextPageToken;
-          this.getVideoInfo(videoIds);
+          this.addVideoInfo(videoIds);
         }, (error: HttpErrorResponse) => {
           alert('Status: ' + error.status + '. Message: ' + error.message);
         }
@@ -139,6 +159,15 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
   addResultsIfNecessary() {
     if ((this.currentPage + 1) * this.listSize > this.items.length)
       this.addResults(this.nextPageToken);
+  }
+
+  refreshPageButtonPanel() {
+    if (this.currentPage === 0) {
+      this.pageButtons = [1, 2, 3, 4];
+      this.moveBackEnabled = false;
+    } else {
+      this.pageButtons = [this.currentPage, this.currentPage + 1, this.currentPage + 2, this.currentPage + 3];
+    }
   }
 }
 
