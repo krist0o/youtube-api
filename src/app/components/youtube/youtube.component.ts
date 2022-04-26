@@ -19,18 +19,20 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
   input!: ElementRef;
 
   items: Item[] = [];
-  nextPageToken = '';
   listSize!: ListSize;
   currentPage: number = 0;
   moveBackEnabled = false;
-  moveForwardEnabled = false;
+  moveForwardEnabled = true;
   paginationPanelEnabled = false;
   pageButtons: number[] = [1, 2, 3, 4];
+  buttonDisabled = false;
 
   getResultsSubscription = new Subscription;
   getVideoInfoSubscription = new Subscription;
   getAutoCompleteSubscription = new Subscription;
   getBreakPointSubscription = new Subscription;
+
+  private nextPageToken = '';
 
   constructor(private youtubeApiService: YoutubeApiServiceService, public breakpointObserver: BreakpointObserver) {
 
@@ -45,7 +47,6 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
         distinctUntilChanged())
       .subscribe((value: string) => {
         this.getResults(value)
-        this.moveForwardEnabled = true;
         this.paginationPanelEnabled = true;
       });
   }
@@ -73,15 +74,18 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getResults(input: string) {
+    this.buttonDisabled = true;
     this.getResultsSubscription = this.youtubeApiService
       .getIdList(input)
       .subscribe((response: YoutubeResponse) => {
-        const videoIds = response.items.map((item: Item) => item.id.videoId);
-        this.nextPageToken = response.nextPageToken;
-        this.getVideoInfo(videoIds)
-      }, (error: HttpErrorResponse) => {
+          const videoIds = response.items.map((item: Item) => item.id.videoId);
+          this.nextPageToken = response.nextPageToken;
+          this.getVideoInfo(videoIds)
+        }, (error: HttpErrorResponse) => {
           if (error.status === 403)
-            alert('Exception 403. Reason: quotaExceeded. \nПревышена квота на запросы с данного ключа, можно сменить ключ или подождать до завтра =)')
+            alert('Exception 403. Reason: quotaExceeded. \nПревышена квота запросов с данного ключа, можно сменить ключ или подождать до завтра =)');
+          else
+            alert('Status: ' + error.status + '. Message: ' + error.message);
         }
       );
   }
@@ -91,18 +95,23 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
       .getVideoInfo(videoIds)
       .subscribe((response: YoutubeResponse) => {
         this.items = this.items.concat(response.items.map((item: Item) => item));
+        this.buttonDisabled = false;
       })
   }
 
-  addResults(nextPageToken:string){
+  addResults(nextPageToken: string) {
+    this.buttonDisabled = true;
     this.getVideoInfoSubscription = this.youtubeApiService
       .getIdListByToken(nextPageToken)
       .subscribe((response: YoutubeResponse) => {
-        const videoIds = response.items.map((item: Item) => item.id.videoId);
-        this.nextPageToken = response.nextPageToken;
-        this.getVideoInfo(videoIds);
-        this.addResultsIfNecessary();
-      });
+
+          const videoIds = response.items.map((item: Item) => item.id.videoId);
+          this.nextPageToken = response.nextPageToken;
+          this.getVideoInfo(videoIds);
+        }, (error: HttpErrorResponse) => {
+          alert('Status: ' + error.status + '. Message: ' + error.message);
+        }
+      );
   }
 
   moveCurrentPage(pageNumber: number) {
@@ -119,21 +128,16 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   moveButtonsNumbers() {
     this.moveBackEnabled = this.currentPage != 0;
-    this.moveForwardEnabled = this.currentPage != this.items.length;
     if (this.currentPage + 1 == this.pageButtons[3]) {                               //движение номеров панели вперед
       this.pageButtons = this.pageButtons.map(value => value + 1);
     }
     if (this.currentPage + 1 == this.pageButtons[0] && this.currentPage != 0) {      //движение номеров панели назад
       this.pageButtons = this.pageButtons.map(value => value - 1);
     }
-    if (this.items.length == this.currentPage + 1) {                                 //если достигнуто дно - почти никогда не выполнится
-      this.moveForwardEnabled = false;
-      this.pageButtons = this.pageButtons.map(value => value - 1);
-    }
   }
 
-  addResultsIfNecessary(){
-    if ((this.currentPage+1)*this.listSize>this.items.length)
+  addResultsIfNecessary() {
+    if ((this.currentPage + 1) * this.listSize > this.items.length)
       this.addResults(this.nextPageToken);
   }
 }
