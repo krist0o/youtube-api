@@ -10,8 +10,8 @@ import {Observable} from "rxjs";
 export class YoutubeApiServiceService {
 
   private url = 'https://www.googleapis.com/youtube/v3';
-  private key = 'AIzaSyDXOF2JLAK4HUKaki3PqLWlHlDBxPjayts';
-  // private key = 'AIzaSyDyMgh39gRp3qbOzmExsZLF3OBsPKu0igw';
+  // private key = 'AIzaSyDXOF2JLAK4HUKaki3PqLWlHlDBxPjayts';
+  private key = 'AIzaSyDyMgh39gRp3qbOzmExsZLF3OBsPKu0igw';
   private maxResults = '15';
 
   constructor(private http: HttpClient) {
@@ -48,6 +48,7 @@ export class YoutubeApiServiceService {
   getIdListByToken(nextPageToken: string) {
     let inputParams = new Map<string, string>();
     inputParams.set('pageToken', nextPageToken);
+    inputParams.set('maxResults', this.maxResults);
     let httpOptions = this.createHttpOptionsWithParams(inputParams);
     return this.http.get<YoutubeResponse>(this.url + '/search', httpOptions);
   }
