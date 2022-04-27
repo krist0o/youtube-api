@@ -1,0 +1,3 @@
+export enum ListSize {
+  ONE_ITEM_SIZE = 1, TWO_ITEMS_SIZE = 2, THREE_ITEMS_SIZE = 3, FOUR_ITEMS_SIZE = 4
+}
