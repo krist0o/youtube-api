@@ -8,13 +8,17 @@ import {LayoutModule} from "@angular/cdk/layout";
 import {HttpClientModule} from "@angular/common/http";
 import {CutTextPipe} from './pipes/cut-text.pipe';
 import {FormatNumberPipe} from './pipes/format-number.pipe';
+import { ItemComponent } from './components/item/item.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     YoutubeComponent,
     CutTextPipe,
-    FormatNumberPipe
+    FormatNumberPipe,
+    ItemComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,
