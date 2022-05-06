@@ -10,6 +10,7 @@ import {CutTextPipe} from './pipes/cut-text.pipe';
 import {FormatNumberPipe} from './pipes/format-number.pipe';
 import { ItemComponent } from './components/item/item.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { CutTitlePipe } from './pipes/cut-title.pipe';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     CutTextPipe,
     FormatNumberPipe,
     ItemComponent,
-    PaginationComponent
+    PaginationComponent,
+    CutTitlePipe
   ],
   imports: [
     BrowserModule,

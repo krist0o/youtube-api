@@ -1,12 +1,10 @@
 .item_container {
   height: 400px;
   width: 280px;
-  /*background-color: #ffffff;*/
+  background-color: #ffffff;
   border-radius: 6px;
   border: 0;
   padding: 10px 0;
-
-  background-color: blue;
 }
 
 .item_header{
@@ -14,7 +12,6 @@
   flex-direction: column;
   justify-content: center;
   height: 33.3%;
-  background-color: aliceblue;
 }
 
 .item_header img{
@@ -23,7 +20,7 @@
 }
 
 .item_header_title{
-  max-width: 280px;
+  width: 276px;
   position: absolute;
   word-wrap: break-word;
   background: #0d7110;
@@ -31,46 +28,33 @@
   font-size: 18px;
   text-align: center;
   color: white;
-  margin: 0 5px;
+  padding: 0 2px;
 }
 
 .item_statistics{
   word-wrap: break-word;
-
   height: 33.3%;
-  background-color: aquamarine;
-}
-
-.item_statistics_container{
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding: 2px 2px 2px 20px;
 }
 
 .item_statistics_row{
   height: 33.3%;
   display: flex;
   align-items: center;
-  padding-top: 10px;
+  padding-top: 2px;
 }
 
 .item_statistics img{
   flex: 0 0 auto;
-  padding-left:20px;
-  padding-right: 5px;
   height: 25px;
   width: 25px;
+  padding-right: 5px;
 }
 
-.item_statistics_row p{
-  text-align: center;
-  word-wrap: break-word;
-}
-
-.item_statistics p{
-  font-size: 14px;
-}
-
-.item_statistics_text{
+.item_statistics_row_text{
   flex: 1 1 auto;
   text-align: center;
   word-wrap: break-word;
@@ -78,5 +62,5 @@
 
 .item_description{
   height: 33.3%;
-  background-color: cadetblue;
+  padding: 0 2px;
 }
