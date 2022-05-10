@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {YoutubeApiServiceService} from "../../services/youtube-api-service.service";
-import {debounceTime, distinctUntilChanged, fromEvent, map, Subscription} from "rxjs";
+import {debounceTime, fromEvent, map, Subscription} from "rxjs";
 import {YoutubeResponse} from "../../models/youtube-response";
 import {Item} from "../../models/item";
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';

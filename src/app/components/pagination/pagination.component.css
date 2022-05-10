@@ -1,0 +1,16 @@
+.pagination_container{
+  min-width: 100vw;
+  overflow: hidden;
+  padding: 20px 0;
+}
+
+.page{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.pagination_panel{
+  background-color: #0d7110;
+  height: 20px;
+}
