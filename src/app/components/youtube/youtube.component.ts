@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {YoutubeApiServiceService} from "../../services/youtube-api-service.service";
-import {debounceTime, fromEvent, map, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {YoutubeResponse} from "../../models/youtube-response";
 import {Item} from "../../models/item";
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
@@ -13,10 +13,8 @@ import {HttpErrorResponse} from "@angular/common/http";
   templateUrl: './youtube.component.html',
   styleUrls: ['./youtube.component.css']
 })
-export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
+export class YoutubeComponent implements OnInit, OnDestroy {
 
-  @ViewChild('input')
-  input!: ElementRef;
 
   items: Item[] = [];
   previousPageSize: ListSize = ListSize.ONE_ITEM_SIZE;
@@ -26,7 +24,7 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
   moveForwardEnabled = true;
   paginationPanelEnabled = false;
   pageButtons: number[] = [1, 2, 3, 4];
-  buttonDisabled = false;
+  isButtonsDisabled = false;
 
   getResultsSubscription = new Subscription;
   getVideoInfoSubscription = new Subscription;
@@ -37,20 +35,6 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(private youtubeApiService: YoutubeApiServiceService, public breakpointObserver: BreakpointObserver) {
 
-  }
-
-  ngAfterViewInit(): void {
-    const input: HTMLInputElement = this.input.nativeElement as HTMLInputElement;
-
-    this.getAutoCompleteSubscription = fromEvent(input, 'input')
-      .pipe(map((event: Event) => (event.target as HTMLInputElement).value),
-        debounceTime(400))
-      .subscribe((value: string) => {
-        if (value.trim() != "") {
-          this.getResults(value)
-          this.paginationPanelEnabled = true;
-        }
-      });
   }
 
   ngOnDestroy(): void {
@@ -107,7 +91,7 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
       .getVideoInfo(videoIds)
       .subscribe((response: YoutubeResponse) => {
         this.items = response.items.map((item: Item) => item);
-        this.buttonDisabled = false;
+        this.isButtonsDisabled = false;
       })
   }
 
@@ -116,12 +100,12 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
       .getVideoInfo(videoIds)
       .subscribe((response: YoutubeResponse) => {
         this.items = this.items.concat(response.items.map((item: Item) => item));
-        this.buttonDisabled = false;
+        this.isButtonsDisabled = false;
       })
   }
 
   addResults(nextPageToken: string) {
-    this.buttonDisabled = true;
+    this.isButtonsDisabled = true;
     this.getVideoInfoSubscription = this.youtubeApiService
       .getIdListByToken(nextPageToken)
       .subscribe((response: YoutubeResponse) => {
@@ -168,6 +152,26 @@ export class YoutubeComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.pageButtons = [this.currentPage, this.currentPage + 1, this.currentPage + 2, this.currentPage + 3];
     }
+  }
+
+  getResultsByInputValue($event: string){
+      this.isButtonsDisabled = true;
+      this.getResultsSubscription = this.youtubeApiService
+        .getIdList($event)
+        .subscribe((response: YoutubeResponse) => {
+            const videoIds = response.items.map((item: Item) => item.id.videoId);
+            this.nextPageToken = response.nextPageToken;
+            this.getVideoInfo(videoIds);
+            this.currentPage = 0;
+            this.refreshPageButtonPanel()
+          }, (error: HttpErrorResponse) => {
+            if (error.status === 403)
+              alert('Exception 403. Reason: quotaExceeded. ' +
+                '\nПревышена квота запросов с данного ключа, можно сменить ключ или подождать до завтра =)');
+            else
+              alert('Status: ' + error.status + '. Message: ' + error.message);
+          }
+        );
   }
 }
 

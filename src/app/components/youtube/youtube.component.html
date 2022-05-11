@@ -1,12 +1,12 @@
 <div class="wrapper">
   <div class="container">
     <div class="content">
-      <div class="search_container">
-        <div class="search">
-          <input #input type="text" class="search-field" placeholder="Найди своё видео">
-          <img src="/assets/search-icon.svg" alt="" class="search-icon">
-        </div>
-      </div>
+<!--      <div class="search_container">-->
+<!--        <div class="search">-->
+<!--          <input #input type="text" class="search-field" placeholder="Найди своё видео">-->
+<!--          <img src="/assets/search-icon.svg" alt="" class="search-icon">-->
+<!--        </div>-->
+<!--      </div>-->
       <div class="results">
         <div class="page">
           <div class="clip" *ngFor="let item of items.slice(currentPage*listSize,(currentPage+1)*listSize);">
@@ -59,6 +59,7 @@
       </div>
     </div>
   </div>
-  <app-pagination></app-pagination>
+  <app-input (inputValue)="getResultsByInputValue($event)"></app-input>
+  <app-pagination [isButtonsDisabled]="isButtonsDisabled" [items]="items"></app-pagination>
 </div>
 

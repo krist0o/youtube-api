@@ -5,6 +5,24 @@
     </div>
   </div>
   <div class="pagination_panel">
-
+    <div *ngIf="isPaginationPanelEnabled" class="pagination_panel_container">
+      <button *ngIf="isMoveBackEnabled" class="move_back"
+              (click)="moveCurrentPage(-1)">
+        <
+      </button>
+      <div *ngFor="let i of [0,1,2,3];">
+        <button class="page_button"
+                style="{{currentPage+1==pageButtons[i]?'background-color:red; color:white':''}}"
+                (click)="setCurrentPage(pageButtons[i])"
+                [disabled]="isButtonsDisabled">
+          {{pageButtons[i]}}
+        </button>
+      </div>
+      <button *ngIf="isMoveForwardEnabled" class="move_forward"
+              (click)="moveCurrentPage(1)"
+              [disabled]="isButtonsDisabled">
+        >
+      </button>
+    </div>
   </div>
 </div>
