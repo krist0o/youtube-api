@@ -1,8 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Item, Items} from "../../models/item";
+import {Item} from "../../models/item";
 import {ListSize} from "../../models/list-size";
 import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
-import {Subscription} from "rxjs";
+import {Subject, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-pagination',
@@ -25,10 +25,13 @@ export class PaginationComponent implements OnInit, OnDestroy {
   isButtonsDisabled = false;
   @Input()
   items!: Item[];
+  @Input()
+  refreshPage = new Subject();
 
   private nextPageToken = '';
 
   getBreakPointSubscription = new Subscription;
+  refreshPageSubscription = new Subscription;
 
   constructor(public breakpointObserver: BreakpointObserver) {
 
@@ -46,14 +49,22 @@ export class PaginationComponent implements OnInit, OnDestroy {
           this.listSize = ListSize.TWO_ITEMS_SIZE;
         else
           this.listSize = ListSize.ONE_ITEM_SIZE;
-
         this.setCurrentPageItems();
         this.correctPageNumbersWhenChangeScale();
       })
+
+    this.refreshPageSubscription = this.refreshPage
+      .subscribe(() => {
+          this.currentPage = 0;
+          this.refreshPageButtonPanel();
+          this.setCurrentPageItems();
+        }
+      )
   }
 
   ngOnDestroy(): void {
     this.getBreakPointSubscription.unsubscribe();
+    this.refreshPageSubscription.unsubscribe();
   }
 
   moveCurrentPage(pageNumber: number) {
