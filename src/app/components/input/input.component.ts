@@ -17,7 +17,8 @@ export class InputComponent implements OnInit {
 
   getAutoCompleteSubscription = new Subscription;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
@@ -35,8 +36,7 @@ export class InputComponent implements OnInit {
       });
   }
 
-  ngOnDestroy():void {
+  ngOnDestroy(): void {
     this.getAutoCompleteSubscription.unsubscribe();
   }
-
 }
