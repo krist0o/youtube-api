@@ -51,35 +51,38 @@ export class YoutubeComponent implements OnInit, OnDestroy {
       })
   }
 
-  addResults(nextPageToken: string) {
+  addResults($event: void) {
     this.getVideoInfoSubscription = this.youtubeApiService
-      .getIdListByToken(nextPageToken)
-      .subscribe((response: YoutubeResponse) => {
+      .getIdListByToken(this.nextPageToken)
+      .subscribe(
+        (response: YoutubeResponse) => {
           const videoIds = response.items.map((item: Item) => item.id.videoId);
           this.nextPageToken = response.nextPageToken;
           this.addVideoInfo(videoIds);
-        }, (error: HttpErrorResponse) => {
-          alert('Status: ' + error.status + '. Message: ' + error.message);
-        }
-      );
+        },
+        (error: HttpErrorResponse) =>
+        this.getAlert(error));
   }
 
   getResultsByInputValue($event: string) {
     this.getResultsSubscription = this.youtubeApiService
       .getIdList($event)
-      .subscribe((response: YoutubeResponse) => {
+      .subscribe(
+        (response: YoutubeResponse) => {
           const videoIds = response.items.map((item: Item) => item.id.videoId);
           this.nextPageToken = response.nextPageToken;
           this.getVideoInfo(videoIds);
+        },
+        (error: HttpErrorResponse) =>
+          this.getAlert(error));
+  }
 
-        }, (error: HttpErrorResponse) => {
-          if (error.status === 403)
-            alert('Exception 403. Reason: quotaExceeded. ' +
-              '\nПревышена квота запросов с данного ключа, можно сменить ключ или подождать до завтра =)');
-          else
-            alert('Status: ' + error.status + '. Message: ' + error.message);
-        }
-      );
+  getAlert(error: HttpErrorResponse) {
+    if (error.status === 403)
+      alert('Exception 403. Reason: quotaExceeded. ' +
+        '\nПревышена квота запросов с данного ключа, можно сменить ключ или подождать до завтра =)');
+    else
+      alert('Status: ' + error.status + '. Message: ' + error.message);
   }
 }
 

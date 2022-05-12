@@ -6,6 +6,7 @@
   border: 0;
   padding: 10px 0;
   margin: 2px 2px;
+  word-wrap: break-word;
 }
 
 .item_header{

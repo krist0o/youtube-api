@@ -60,6 +60,6 @@
 <!--    </div>-->
 <!--  </div>-->
   <app-input (inputValue)="getResultsByInputValue($event)"></app-input>
-  <app-pagination [items]="items" ></app-pagination>
+  <app-pagination [items]="items" (needData)="addResults($event)"></app-pagination>
 </div>
 

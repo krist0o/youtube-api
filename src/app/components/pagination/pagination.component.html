@@ -10,7 +10,7 @@
               (click)="moveCurrentPage(-1)">
         <
       </button>
-      <div *ngFor="let i of [0,1,2,3];">
+      <div *ngFor="let i of [0,1,2,3]">
         <button class="page_button"
                 style="{{paginationParameters.currentPage+1==paginationParameters.pageButtons[i]?'background-color:red; color:white':''}}"
                 (click)="setCurrentPage(paginationParameters.pageButtons[i])"

@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
 import {Item} from "../../models/item";
 import {ListSize} from "../../models/list-size";
 import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
@@ -20,6 +20,8 @@ export class PaginationComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input()
   items: Item[] = [];
+  @Output()
+  needData: EventEmitter<void> = new EventEmitter<void>();
 
   getBreakPointSubscription = new Subscription;
   refreshPageSubscription = new Subscription;
@@ -71,13 +73,14 @@ export class PaginationComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   addResultsIfNecessary() {
-    // if ((this.currentPage + 1) * this.listSize > this.items.length)
-    //   this.addResults(this.nextPageToken);
+    if (((this.paginationParameters.currentPage + 1) * this.listSize > this.items.length)) {
+      this.needData.emit()
+    }
   }
 
   refreshPageButtonPanel() {
     if (this.paginationParameters.currentPage === 0) {
-      this.paginationParameters.pageButtons = [1, 2, 3, 4];
+      this.paginationParameters.pageButtons = startParameters.pageButtons;
       this.paginationParameters.isMoveBackEnabled = false;
     } else {
       this.paginationParameters.pageButtons =
@@ -101,7 +104,7 @@ export class PaginationComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   refreshPageIfNewData() {
-    if (this.firstFiveItems != this.items.slice(0, 4)) {
+    if (!this.isArraysEqual(this.items.slice(0,4),this.firstFiveItems)) {
       this.paginationParameters.currentPage = 0;
       this.refreshPageButtonPanel();
     }
@@ -123,5 +126,11 @@ export class PaginationComponent implements OnInit, OnDestroy, OnChanges {
         this.setCurrentPageItems();
         this.correctPageNumbersWhenChangeScale();
       })
+  }
+
+  isArraysEqual(array1: any[], array2: any[]) {
+    return (array1.length == array2.length) && array1.every( (element, index) => {
+      return element === array2[index];
+    });
   }
 }
