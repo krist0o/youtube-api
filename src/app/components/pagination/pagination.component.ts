@@ -74,6 +74,7 @@ export class PaginationComponent implements OnInit, OnDestroy, OnChanges {
 
   addResultsIfNecessary() {
     if (((this.paginationParameters.currentPage + 1) * this.listSize > this.items.length)) {
+      this.paginationParameters.isButtonsDisabled = true;
       this.needData.emit()
     }
   }
