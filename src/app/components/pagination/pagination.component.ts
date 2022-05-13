@@ -81,7 +81,7 @@ export class PaginationComponent implements OnInit, OnDestroy, OnChanges {
 
   refreshPageButtonPanel() {
     if (this.paginationParameters.currentPage === 0) {
-      this.paginationParameters.pageButtons = startParameters.pageButtons;
+      this.paginationParameters.pageButtons = [1, 2, 3, 4];
       this.paginationParameters.isMoveBackEnabled = false;
     } else {
       this.paginationParameters.pageButtons =
@@ -105,7 +105,7 @@ export class PaginationComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   refreshPageIfNewData() {
-    if (!this.isArraysEqual(this.items.slice(0,4),this.firstFiveItems)) {
+    if (!this.isArraysEqual(this.items.slice(0, 4), this.firstFiveItems)) {
       this.paginationParameters.currentPage = 0;
       this.refreshPageButtonPanel();
     }
@@ -130,7 +130,7 @@ export class PaginationComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   isArraysEqual(array1: any[], array2: any[]) {
-    return (array1.length == array2.length) && array1.every( (element, index) => {
+    return (array1.length == array2.length) && array1.every((element, index) => {
       return element === array2[index];
     });
   }
