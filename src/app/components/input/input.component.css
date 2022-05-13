@@ -1,0 +1,33 @@
+.search_container{
+  display: flex;
+  justify-content: center;
+}
+
+.search {
+  display: inline-flex;
+  height: 20px;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #ffffff;
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  order: -1;
+}
+
+.search-field {
+  width: 250px;
+  border: 0;
+  font-size: 18px;
+}
+
+.search-field:focus {
+  outline: none;
+}
+
+.search-field:focus + .search-icon {
+  /* стили для иконки при фокусе поля */
+}
