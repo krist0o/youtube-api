@@ -1,0 +1,27 @@
+<div class="item_container">
+  <a href="https://www.youtube.com/watch?v={{item.id}}" target="_blank">
+    <div class="item_header">
+      <img src="{{item.snippet.thumbnails.medium.url}}" alt="image">
+      <div class="item_header_title"> {{item.snippet.title}}</div>
+    </div>
+  </a>
+  <div class="item_statistics">
+
+    <div class="item_statistics_row">
+      <img src="assets/person-icon.svg" alt="" class="person-icon">
+      <div class="item_statistics_row_text">{{item.snippet.channelTitle| cutTitle}} </div>
+    </div>
+    <div class="item_statistics_row">
+      <img src="assets/calendar-icon.svg" alt="" class="calendar-icon">
+      <div class="item_statistics_row_text">{{item.snippet.publishedAt | date:'dd.MM.yyyy'}}</div>
+    </div>
+    <div class="item_statistics_row">
+      <img src="assets/eye-icon.svg" alt="" class="eye-icon">
+      <div class="item_statistics_row_text">{{item.statistics.viewCount | formatNumber}}</div>
+    </div>
+
+  </div>
+  <div class="item_description">
+    <div class="item_description_row">{{item.snippet.description | cutText}}</div>
+  </div>
+</div>
